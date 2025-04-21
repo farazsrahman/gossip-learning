@@ -1,6 +1,6 @@
 # Gossip Learning
 
-Since reading [AI 2027](https://ai-2027.com/), I have been thinking a lot about multi-agent learning. This project considers a network of learning agents who may want to share information about their representations of the world with neighbors (hence "gossip"). This sort of learning paradigm is interesting for two reasons 
+Since reading [AI 2027](https://ai-2027.com/), I have been thinking a lot about multi-agent collaboration and specifically learning. This project considers a network of learning agents who may want to share information about their representations of the world with neighbors (hence "gossip"). This sort of learning paradigm is interesting for two reasons 
 1. It relaxes the need to centralize all data and compute while training an agent
 2. The optimization dynamics for any single agent will depend on the toplogy and tasks of the entire network and may be worth studying on its own.
 

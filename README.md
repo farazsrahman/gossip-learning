@@ -1,3 +1,7 @@
+# Gossip Learning
+
+Since reading [AI 2027](https://ai-2027.com/), I have been thinking a lot about multi-agent learning. This project considers multiple learners who may want to share information about their representations of the world with neighbors. The experiments in this repo formulate this by giving each agent encoder-decoder architecture where decoders don't just recieve the embedding from the encoder, but recieve some cumulative embedding from all of it's neighbors (e.g. avg. embedding, embedding from the parameter avg. encoder, concat embedding, etc.)
+
 ## Work Log:
 
 TODO:
@@ -10,10 +14,6 @@ April 20th
 - Create agent class with encoder, decoder architecture. (DONE)
 - Test with two agents, on a single-task toy data (DONE)
 - Create Oracle validation loop (DONE)
-
-## Description
-
-A distributed learning framework where multiple agents train on different subsets of MNIST digits. Each agent has an encoder and decoder, and can share embeddings with neighboring agents based on a specified topology. We use an "Oracle" agent with access to the encoders of all agents to measure performance of the group.
 
 ## Example Usage
 The following command launches the training loop using two learners with one seeing digits 0-4 of MNIST and another seeing 5-9.

@@ -6,12 +6,20 @@ from tqdm import tqdm
 import numpy as np
 import copy
 import time
+import os
 
 from agent import Agent, create_agents
 from dataset import load_mnist_data
 from config import TrainingConfig
+from utils import visualize_agents
 
 def train(config: TrainingConfig):
+    # Create plots directory if it doesn't exist
+    os.makedirs('plots', exist_ok=True)
+    
+    # Visualize the agent topology and digit assignments
+    visualize_agents(config)
+    
     # Fix random seed for reproducibility
     torch.manual_seed(42)
 

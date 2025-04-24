@@ -7,6 +7,7 @@ class TrainingConfig:
     n_updates: int
     batch_size: int
     learning_rate: float
+    encoder_cumulator: str  # 'embedding_avg' or 'encoder_avg'
 
     @classmethod
     def from_args(cls):
@@ -18,6 +19,9 @@ class TrainingConfig:
         parser.add_argument('--val_freq', type=int, default=100, help='Number of updates between validation')
         parser.add_argument('--batch-size', type=int, default=32, help='Batch size for training')
         parser.add_argument('--lr', type=float, default=0.001, help='Learning rate')
+        parser.add_argument('--encoder-cumulator', type=str, default='embedding_avg', 
+                          choices=['embedding_avg', 'encoder_avg'],
+                          help='Method to cumulate encoder outputs: embedding_avg (default) or encoder_avg')
         
         args = parser.parse_args()
 
@@ -32,6 +36,7 @@ class TrainingConfig:
             n_updates=args.n_updates,
             batch_size=args.batch_size,
             learning_rate=args.lr,
+            encoder_cumulator=args.encoder_cumulator
         )
 
 def get_topology(topology_name: str):
@@ -41,6 +46,10 @@ def get_topology(topology_name: str):
         return N2_FC_TOPOLOGY
     elif topology_name == "N4_RING":
         return N4_RING_TOPOLOGY
+    elif topology_name == "N4_DISCONNECTED":
+        return N4_DISCONNECTED_TOPOLOGY
+    elif topology_name == "N4_FC":
+        return N4_FC_TOPOLOGY
     else:
         raise ValueError(f"Invalid topology: {topology_name}")
 
@@ -51,6 +60,8 @@ def get_digits_partition(partition_name: str):
         return N2_ALL_DIGITS
     elif partition_name == "N2_SPLIT":
         return N2_SPLIT_DIGITS
+    elif partition_name == "N4_SPLIT_DIGITS":
+        return N4_SPLIT_DIGITS
     else:
         raise ValueError(f"Invalid digits partition: {partition_name}")
 

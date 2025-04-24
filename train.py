@@ -11,7 +11,7 @@ import os
 from agent import Agent, create_agents
 from dataset import load_mnist_data
 from config import TrainingConfig
-from utils import visualize_agents
+from viz import visualize_agents, plot_metrics
 
 def train(config: TrainingConfig):
     # Create plots directory if it doesn't exist
@@ -23,8 +23,18 @@ def train(config: TrainingConfig):
     # Fix random seed for reproducibility
     torch.manual_seed(42)
 
-    agents = create_agents(config.topology)
+    # Create agents with the specified topology and encoder cumulator
+    agents = create_agents(
+        topology=config.topology,
+        encoder_cumulator=config.encoder_cumulator
+    )
     print(f"Created {len(agents)} agents")
+
+    # Initialize metrics tracking
+    metrics = {
+        **{f'agent_{i}': {'val_loss': [], 'accuracy': []} for i in range(len(agents))},
+        'oracle': {'val_loss': [], 'accuracy': []}
+    }
 
     data_loaders = []
     for idx, agent in enumerate(agents):
@@ -86,13 +96,29 @@ def train(config: TrainingConfig):
         update_count += 1
         
         if update_count % 100 == 0:  # Perform validation every 100 updates
-            metrics = do_validation(agents, data_loaders, criterion)
+            validation_metrics = do_validation(agents, data_loaders, criterion)
             
             print(f"Update {update_count}/{config.n_updates}, Running Loss: {running_avg:.4f}")
-            for metric_name, metric_value in metrics.items():
+            for metric_name, metric_value in validation_metrics.items():
                 print(f"{metric_name}: {metric_value:.4f}")
+                
+                # Store metrics for plotting
+                if metric_name.startswith('agent_'):
+                    agent_id = '_'.join(metric_name.split('_')[:2])  # get 'agent_X'
+                    if metric_name.endswith('val_loss'):
+                        metrics[agent_id]['val_loss'].append(metric_value)
+                    elif metric_name.endswith('accuracy'):
+                        metrics[agent_id]['accuracy'].append(metric_value)
+                elif metric_name.startswith('oracle_'):
+                    if metric_name.endswith('val_loss'):
+                        metrics['oracle']['val_loss'].append(metric_value)
+                    elif metric_name.endswith('accuracy'):
+                        metrics['oracle']['accuracy'].append(metric_value)
     
     pbar.close()
+    
+    # Plot metrics
+    plot_metrics(metrics, config)
 
 def do_validation(
         agents: list[Agent], 

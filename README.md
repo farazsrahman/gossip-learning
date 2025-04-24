@@ -11,10 +11,14 @@ The experiments in this repo formulate this by giving each agent an encoder-deco
 ## Work Log:
 
 TODO:
-- See oracle performance over time on a couple simple topologies
-- See how parameter averaging compares to embedding averaging 
-- Validate agent encoder itself on far away agent's task to see if they pick up the representation
-- See training speed without recieving neighbor updates vs. with receiving neighbor updates.
+- Figure out what might be the issue with parameter averaging
+- Validate agent encoder itself on far away agent's task to see if they pick up the representation - do this when it makes sense (does not necessarily for embedding avg, since those can't really travel
+- Create plots section in this README.md to show off initial results 
+
+April 24th 
+- Tested N4 ring vs. disconnected. Ring performs better. Saved Plots to static folder
+- Attempted encoder averaging, but it did not perform as expected... worse than random guiessing?
+- Got plotting utils up so we not have some visuals!
 
 April 20th 
 - Create agent class with encoder, decoder architecture. (DONE)
